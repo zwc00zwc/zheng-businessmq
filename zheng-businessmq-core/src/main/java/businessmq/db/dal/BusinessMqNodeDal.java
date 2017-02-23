@@ -94,7 +94,9 @@ public class BusinessMqNodeDal {
         try {
             preparedStatement=connection.prepareStatement("SELECT COUNT(*) FROM tb_businessmq_node");
             resultSet=preparedStatement.executeQuery();
-            count=resultSet.getInt(1);
+            while (resultSet.next()){
+                count=resultSet.getInt(1);
+            }
         } catch (SQLException e) {
             BaseDB.dispose(connection,preparedStatement,resultSet);
         }finally {
