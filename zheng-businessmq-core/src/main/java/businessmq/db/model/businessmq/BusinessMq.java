@@ -1,6 +1,7 @@
 package businessmq.db.model.businessmq;
 
-import domain.model.BaseModel;
+
+import businessmq.db.model.BaseModel;
 
 /**
  * Created by alan.zheng on 2017/2/13.

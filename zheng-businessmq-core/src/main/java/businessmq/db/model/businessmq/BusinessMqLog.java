@@ -1,6 +1,7 @@
 package businessmq.db.model.businessmq;
 
-import domain.model.BaseModel;
+
+import businessmq.db.model.BaseModel;
 
 import java.util.Date;
 
