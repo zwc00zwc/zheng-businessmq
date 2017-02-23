@@ -1,0 +1,4 @@
+regCenter:
+  serverList: localhost:2181
+  namespace: businessmq
+  auth: auth
