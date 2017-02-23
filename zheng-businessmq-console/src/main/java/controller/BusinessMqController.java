@@ -37,7 +37,7 @@ public class BusinessMqController extends BaseController {
         PageModel<BusinessMq> pageModel= businessMqService.queryBusinessMqPage(query);
         model.addAttribute("mqs",pageModel);
         model.addAttribute("user",getAuthUser(httpSession));
-        return "/mq/index";
+        return "/businessmq/index";
     }
 
     @Auth(rule ="/businessmq/node")
@@ -47,13 +47,13 @@ public class BusinessMqController extends BaseController {
         PageModel<BusinessMqNode> pageModel= businessMqService.queryBusinessMqNodePage(query);
         model.addAttribute("pageModel",pageModel);
         model.addAttribute("user",getAuthUser(httpSession));
-        return "/mq/node";
+        return "/businessmq/node";
     }
 
     @Auth(rule ="/businessmq/node/add")
     @RequestMapping(value = "/businessmq/node/add")
     public String nodeAdd(){
-        return "/mq/nodeadd";
+        return "/businessmq/nodeadd";
     }
 
     @Auth(rule ="/businessmq/node/add")
@@ -90,6 +90,6 @@ public class BusinessMqController extends BaseController {
         model.addAttribute("endTime",endTime);
         model.addAttribute("mqlogs",logPageModel);
         model.addAttribute("user",getAuthUser(httpSession));
-        return "/mq/log";
+        return "/businessmq/log";
     }
 }

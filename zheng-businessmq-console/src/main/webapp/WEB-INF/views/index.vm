@@ -63,11 +63,12 @@
     <input runat="server" id="divScrollValue" type="hidden" value="" />
     <div class="menu_dropdown bk_2">
         <dl>
-            <dt><i class="Hui-iconfont"></i> 任务管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
+            <dt><i class="Hui-iconfont"></i>  业务消息管理<i class="Hui-iconfont menu_dropdown-arrow">&#xe6d5;</i></dt>
             <dd>
                 <ul>
-                    <li><a _href="/job/index" data-title="任务列表" href="javascript:void(0)">任务列表</a></li>
-                    <li><a _href="/job/log" data-title="任务日志列表" href="javascript:void(0)">任务日志列表</a></li>
+                    <li><a _href="/businessmq/index" data-title="业务消息监控列表" href="javascript:void(0)">业务消息监控列表</a></li>
+                    <li><a _href="/businessmq/log" data-title="业务消息日志列表" href="javascript:void(0)">业务消息日志列表</a></li>
+                    <li><a _href="/businessmq/node" data-title="业务消息分区节点列表" href="javascript:void(0)">业务消息分区节点列表</a></li>
                 </ul>
             </dd>
         </dl>
