@@ -1,0 +1,22 @@
+#macro(pagination $pageModel $search)
+    ##当前页
+        #set($currpage=$pageModel.currpage)
+    ##总页数
+        #set($pagecount=$pageModel.pagecount)
+    ##页大小
+        #set($pagesize=$pageModel.pagesize)
+    ##上一页
+        #set($prvpage=$pageModel.currpage - 1)
+    ##下一页
+        #set($nextpage=$pageModel.currpage + 1)
+    <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">共 $!{pageModel.pagecount} 页</div>
+    <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate">
+        #if($currpage>1)
+            <a class="paginate_button previous disabled" href="$search&currPage=$prvpage" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" id="DataTables_Table_0_previous">上一页</a>
+        #end
+        <span><a class="paginate_button current" aria-controls="DataTables_Table_0" data-dt-idx="1" tabindex="0">$!{currpage}</a></span>
+        #if($currpage<$pagecount)
+            <a class="paginate_button previous disabled" href="$search&currPage=$nextpage" aria-controls="DataTables_Table_0" data-dt-idx="0" tabindex="0" id="DataTables_Table_0_previous">下一页</a>
+        #end
+    </div>
+#end

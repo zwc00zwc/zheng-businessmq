@@ -1,0 +1,97 @@
+#set($layout =  "share/hi-layout.vm" )
+<article class="page-container">
+    <form class="form form-horizontal" id="form-node-add" method="post">
+        <input type="hidden" name="id" value="">
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>节点：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="node" name="node">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>driver：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="driver" name="driver">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>url：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="url" name="url">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>username：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="username" name="username">
+            </div>
+        </div>
+        <div class="row cl">
+            <label class="form-label col-xs-4 col-sm-3"><span class="c-red">*</span>password：</label>
+            <div class="formControls col-xs-8 col-sm-9">
+                <input type="text" class="input-text" value="" placeholder="" id="password" name="password">
+            </div>
+        </div>
+##        <div class="row cl">
+##            <label class="form-label col-xs-4 col-sm-3">备注：</label>
+##            <div class="formControls col-xs-8 col-sm-9">
+##                <textarea name="remark" cols="" rows="" class="textarea"  placeholder="说点什么...100个字符以内" dragonfly="true" onKeyUp="textarealength(this,100)">$!{perm.remark}</textarea>
+##                <p class="textarea-numberbar"><em class="textarea-length">0</em>/100</p>
+##            </div>
+##        </div>
+        <div class="row cl">
+            <div class="col-xs-8 col-sm-9 col-xs-offset-4 col-sm-offset-3">
+                <input class="btn btn-primary radius" type="submit" value="&nbsp;&nbsp;提交&nbsp;&nbsp;">
+            </div>
+        </div>
+    </form>
+</article>
+#parse("share/hi-footer.vm")
+<script type="text/javascript">
+    $(function(){
+        $('.skin-minimal input').iCheck({
+            checkboxClass: 'icheckbox-blue',
+            radioClass: 'iradio-blue',
+            increaseArea: '20%'
+        });
+
+        $("#form-node-add").validate({
+            rules:{
+                node:{
+                    required:true
+                },
+                driver:{
+                    required:true
+                },
+                url:{
+                    required:true
+                },
+                username:{
+                    required:true
+                },
+                password:{
+                    required:true
+                }
+            },
+            onkeyup:false,
+            focusCleanup:true,
+            success:"valid",
+            submitHandler:function(form){
+                jQuery.ajax({
+                    url: '$!{request.getContextPath()}/businessmq/node/adding',
+                    data: jQuery('#form-node-add').serialize(),
+                    type: "post",
+                    success: function (data) {
+                        if (data.code > 0) {
+                            layer.msg("成功!",{icon:1,time:1000});
+                            window.parent.location.reload();
+                        }
+                        else {
+                            layer.msg(data.msg,{icon:1,time:1000});
+                        }
+                    }
+                });
+            }
+        });
+    });
+</script>

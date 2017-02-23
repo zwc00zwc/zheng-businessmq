@@ -1,0 +1,10 @@
+<!--_footer 作为公共模版分离出去-->
+<script type="text/javascript" src="$!{request.getContextPath()}/resource/lib/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="$!{request.getContextPath()}/resource/lib/layer/2.1/layer.js"></script>
+<script type="text/javascript" src="$!{request.getContextPath()}/resource/lib/icheck/jquery.icheck.min.js"></script>
+<script type="text/javascript" src="$!{request.getContextPath()}/resource/lib/jquery.validation/jquery.validate.min.js"></script>
+<script type="text/javascript" src="$!{request.getContextPath()}/resource/lib/jquery.validation/validate-methods.js"></script>
+<script type="text/javascript" src="$!{request.getContextPath()}/resource/lib/jquery.validation/messages_zh.min.js"></script>
+<script type="text/javascript" src="$!{request.getContextPath()}/resource/js/h-ui/H-ui.js"></script>
+<script type="text/javascript" src="$!{request.getContextPath()}/resource/js/h-ui/H-ui.admin.js"></script>
+<!--/_footer /作为公共模版分离出去-->

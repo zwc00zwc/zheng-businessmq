@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		   http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		   http://www.springframework.org/schema/context
+		   http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		   http://www.springframework.org/schema/aop
+		   http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+
+    <context:annotation-config/>
+
+    <!-- 强制SPRING使用CGLIB动态代理，不使用JDK代理。 -->
+    <aop:config proxy-target-class="true"/>
+
+    <import resource="classpath:config/spring-mvc.xml"/>
+
+    <bean id="businessMqNodeDal" class="businessmq.db.dal.BusinessMqNodeDal" />
+    <bean id="businessMqDal" class="businessmq.db.dal.BusinessMqDal" />
+
+    <context:component-scan base-package="services"></context:component-scan>
+
+    <!--<bean id="authExceptionHandler" class="handler.AuthExceptionHandler"></bean>-->
+
+    <!--<context:component-scan base-package="aopservice"></context:component-scan>-->
+    <!--支持aspectj-->
+    <aop:aspectj-autoproxy/>
+
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <!-- 线程池活跃的线程数 -->
+        <property name="corePoolSize" value="5" />
+        <!-- 线程池最大活跃的线程数 -->
+        <property name="maxPoolSize" value="10" />
+        <!-- 队列的最大容量 -->
+        <property name="queueCapacity" value="25" />
+    </bean>
+</beans>
