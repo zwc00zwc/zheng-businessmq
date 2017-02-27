@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		   http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		   http://www.springframework.org/schema/context
+		   http://www.springframework.org/schema/context/spring-context-4.2.xsd
+		   http://www.springframework.org/schema/aop
+		   http://www.springframework.org/schema/aop/spring-aop-4.2.xsd">
+
+    <context:annotation-config/>
+
+    <!-- 强制SPRING使用CGLIB动态代理，不使用JDK代理。 -->
+    <aop:config proxy-target-class="true"/>
+
+    <context:component-scan base-package="example.config"></context:component-scan>
+
+    <import resource="classpath:config/spring-mvc.xml"/>
+    <!--支持aspectj-->
+    <aop:aspectj-autoproxy/>
+
+    <bean id="threadPoolTaskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <!-- 线程池活跃的线程数 -->
+        <property name="corePoolSize" value="5" />
+        <!-- 线程池最大活跃的线程数 -->
+        <property name="maxPoolSize" value="10" />
+        <!-- 队列的最大容量 -->
+        <property name="queueCapacity" value="25" />
+    </bean>
+
+    <bean id="zookeeperConfig" class="businessmq.reg.zookeeper.ZookeeperConfig">
+        <property name="serverLists" value="192.168.0.51:2181"></property>
+        <property name="namespace" value="root"></property>
+        <property name="auth" value="auth"></property>
+    </bean>
+
+    <bean id="zookeeperRegistryCenter" class="businessmq.reg.zookeeper.ZookeeperRegistryCenter" init-method="init">
+        <constructor-arg type="businessmq.reg.zookeeper.ZookeeperConfig">
+            <ref bean="zookeeperConfig"></ref>
+        </constructor-arg>
+    </bean>
+
+    <bean id="dbConfig" class="businessmq.db.DbConfig">
+        <property name="url" value="jdbc:mysql://192.168.0.51:3306/com.zwc?useUnicode=true&amp;characterEncoding=UTF-8"></property>
+        <property name="driver" value="com.mysql.jdbc.Driver"></property>
+        <property name="username" value="root"></property>
+        <property name="password" value="root"></property>
+    </bean>
+
+    <bean id="queueRoutingKey" class="java.util.HashMap">
+        <constructor-arg>
+            <map>
+                <entry>
+                    <key><value>command</value></key>
+                    <value></value>
+                </entry>
+            </map>
+        </constructor-arg>
+    </bean>
+
+    <bean id="producterConfig" class="businessmq.config.ProducterConfig">
+        <property name="node" value="1"></property>
+        <property name="host" value="127.0.0.1"></property>
+        <property name="port" value="5672"></property>
+        <property name="userName" value="guest"></property>
+        <property name="password" value="guest"></property>
+        <property name="queueRoutingKey" ref="queueRoutingKey"></property>
+    </bean>
+</beans>
