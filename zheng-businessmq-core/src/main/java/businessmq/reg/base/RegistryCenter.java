@@ -120,6 +120,13 @@ public interface RegistryCenter {
     void createEphemeralSequential(String key);
 
     /**
+     * 返回持久化临时顺序注册数据
+     * @param key
+     * @return
+     */
+    String createEphemeralSequentialAndReturn(String key);
+
+    /**
      * 添加本地缓存.
      *
      * @param cachePath 需加入缓存的路径

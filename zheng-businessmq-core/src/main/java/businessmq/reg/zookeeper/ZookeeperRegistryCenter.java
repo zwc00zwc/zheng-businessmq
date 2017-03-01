@@ -245,6 +245,16 @@ public class ZookeeperRegistryCenter implements RegistryCenter {
         }
     }
 
+    public String createEphemeralSequentialAndReturn(final String key) {
+        try {
+            return client.create().creatingParentsIfNeeded().withMode(CreateMode.EPHEMERAL_SEQUENTIAL).forPath(key);
+            //CHECKSTYLE:OFF
+        } catch (final Exception ex) {
+            MqLogManager.log("System",ex.toString(),new Date());
+        }
+        return null;
+    }
+
     public void remove(final String key) {
         try {
             client.delete().deletingChildrenIfNeeded().forPath(key);
