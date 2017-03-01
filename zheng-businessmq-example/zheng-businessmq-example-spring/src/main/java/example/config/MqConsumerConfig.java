@@ -34,17 +34,17 @@ public class MqConsumerConfig {
     @Bean(name = "consumerConfig")
     public ConsumerConfig consumerConfig(final Consumer consumer){
         ConsumerConfig consumerConfig=new ConsumerConfig();
-        consumerConfig.setHost("127.0.0.1");
+        consumerConfig.setHost("192.168.0.51");
         consumerConfig.setPort(5672);
-        consumerConfig.setUserName("guest");
-        consumerConfig.setPassword("guest");
+        consumerConfig.setUserName("root");
+        consumerConfig.setPassword("root");
         consumerConfig.setConsumerQueue("command");
         consumerConfig.setJavaClass(consumer.getClass().getCanonicalName());
         return consumerConfig;
     }
 
     @Bean(initMethod = "init",name = "TestListen")
-    public ConsumerListener dataflowJobScheduler(final Consumer consumer,final ConsumerConfig consumerConfig) {
+    public ConsumerListener consumerListener(final Consumer consumer,final ConsumerConfig consumerConfig) {
         return new SpringConsumerListener(consumerConfig,dbConfig,zookeeperRegistryCenter,consumer,threadPoolTaskExecutor);
     }
 }

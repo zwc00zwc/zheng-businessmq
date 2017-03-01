@@ -62,10 +62,10 @@
 
     <bean id="producterConfig" class="businessmq.config.ProducterConfig">
         <property name="node" value="1"></property>
-        <property name="host" value="127.0.0.1"></property>
+        <property name="host" value="192.168.0.51"></property>
         <property name="port" value="5672"></property>
-        <property name="userName" value="guest"></property>
-        <property name="password" value="guest"></property>
+        <property name="userName" value="root"></property>
+        <property name="password" value="root"></property>
         <property name="queueRoutingKey" ref="queueRoutingKey"></property>
     </bean>
 </beans>

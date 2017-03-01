@@ -24,10 +24,10 @@ public class MqProducterConfig {
     public ProducterConfig config(){
         ProducterConfig producterConfig=new ProducterConfig();
         producterConfig.setNode(1);
-        producterConfig.setHost("127.0.0.1");
+        producterConfig.setHost("192.168.0.51");
         producterConfig.setPort(5672);
-        producterConfig.setUserName("guest");
-        producterConfig.setPassword("guest");
+        producterConfig.setUserName("root");
+        producterConfig.setPassword("root");
         Map queuemap=new HashMap();
         queuemap.put("command",null);
         producterConfig.setQueueRoutingKey(queuemap);

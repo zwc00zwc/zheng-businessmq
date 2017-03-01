@@ -34,12 +34,12 @@ public class TestMqConfig {
     }
 
     @Bean(initMethod = "init",name = "TestListen")
-    public ConsumerListener dataflowJobScheduler(final TestConsumer testConsumer, ThreadPoolTaskExecutor threadPoolTaskExecutor) {
+    public ConsumerListener consumerListener(final TestConsumer testConsumer, ThreadPoolTaskExecutor threadPoolTaskExecutor) {
         ConsumerConfig consumerConfig=new ConsumerConfig();
-        consumerConfig.setHost("127.0.0.1");
+        consumerConfig.setHost("192.168.0.51");
         consumerConfig.setPort(5672);
-        consumerConfig.setUserName("guest");
-        consumerConfig.setPassword("guest");
+        consumerConfig.setUserName("root");
+        consumerConfig.setPassword("root");
         consumerConfig.setConsumerQueue("command");
         consumerConfig.setJavaClass(testConsumer.getClass().getCanonicalName());
         DbConfig dbConfig=new DbConfig();
