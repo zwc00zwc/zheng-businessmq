@@ -7,7 +7,7 @@ public enum MessageType {
     /**
      * mysql
      */
-    MYSQL("START"),
+    MYSQL("MYSQL"),
     /**
      * mongodb
      */

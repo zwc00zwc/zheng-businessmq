@@ -35,41 +35,94 @@ public class ProducterProvider {
         message.setMsg(msg);
         message.setMsgType(MessageType.MYSQL.getType());
         try {
-            Map<Integer,DbConfig> dbConfigMap= producterConfig.getBlanceNode();
-            if (!dbConfigMap.isEmpty()){
-                Integer node= producterConfig.getNode();
-                while (!dbConfigMap.containsKey(producterConfig.getNode())){
-                    if (node+1>dbConfigMap.size()){
-                        node=1;
-                    }else {
-                        node++;
-                    }
-                }
-                DbConfig dbConfig= dbConfigMap.get(node);
-                if (node+1>dbConfigMap.size()){
-                    producterConfig.setNode(1);
-                }else {
-                    producterConfig.setNode(node+1);
-                }
-                BusinessMqDal dal=new BusinessMqDal();
-                Long id= null;
+            DbConfig dbConfig = getLoadBalanceNodeInfo(producterConfig);
+            Long id= null;
+            int errorcount=0;
+            boolean sendresult=false;
+            while (errorcount < 3 && !sendresult){
                 try {
-                    id = dal.insertMq(dbConfig,msg);
+                    id= persistenceMessage(dbConfig,msg);
+                    sendresult=true;
                 } catch (Exception e) {
-                    MqLogManager.log("【"+node+"】节点异常",
-                            e.toString(),new Date());
-                    dbConfigMap.remove(node);
-                    producterConfig.setBlanceNode(dbConfigMap);
-                }
-                if (id!=null){
-                    message.setId(id);
+                    Integer removeNode=failover(producterConfig);
+                    MqLogManager.log("【"+removeNode+"】节点异常", e.toString(),new Date());
+                    errorcount++;
                 }
             }
+            message.setId(id);
         } catch (Exception e) {
             MqLogManager.log(producterConfig.getExchangeName()+"发送消息异常",
                     e.toString(),new Date());
         }
         String sendmsg= JSON.toJSONString(message);
+        trySend(producterConfig,sendmsg);
+    }
+
+    /**
+     * 顺序轮询节点获取节点及分区,从而达到负载均衡的目的
+     * @param producterConfig
+     * @return
+     */
+    private DbConfig getLoadBalanceNodeInfo(ProducterConfig producterConfig){
+        Map<Integer,DbConfig> dbConfigMap= producterConfig.getBlanceNode();
+        if (!dbConfigMap.isEmpty()){
+            Integer node= producterConfig.getNode();
+            while (!dbConfigMap.containsKey(producterConfig.getNode())){
+                if (node+1>dbConfigMap.size()){
+                    node=1;
+                }else {
+                    node++;
+                }
+            }
+            if (node+1>dbConfigMap.size()){
+                producterConfig.setNode(1);
+            }else {
+                producterConfig.setNode(node+1);
+            }
+            return dbConfigMap.get(node);
+        }
+        return null;
+    }
+
+    /**
+     * 故障转移，移除异常分区节点
+     * @param producterConfig
+     */
+    private Integer failover(ProducterConfig producterConfig){
+        Integer removeNode=null;
+        if (producterConfig.getNode()-1<1){
+            removeNode=producterConfig.getBlanceNode().size();
+        }else {
+            removeNode=producterConfig.getNode()-1;
+        }
+        if (producterConfig.getBlanceNode().containsKey(removeNode)){
+            producterConfig.getBlanceNode().remove(removeNode);
+        }
+        return removeNode;
+    }
+
+    /**
+     * 消息持久化
+     * @param dbConfig
+     * @param msg
+     * @return
+     */
+    private Long persistenceMessage(DbConfig dbConfig,String msg){
+        BusinessMqDal dal=new BusinessMqDal();
+        Long id= null;
+        id = dal.insertMq(dbConfig,msg);
+        if (id!=null){
+            return id;
+        }
+        return null;
+    }
+
+    /**
+     * 发送消息
+     * @param producterConfig
+     * @param sendmsg
+     */
+    private void trySend(ProducterConfig producterConfig,String sendmsg){
         try {
             Channel channel= MqRegistryManeger.getMqChannel(producterConfig);
             Map<String,Set<String>> map= producterConfig.getQueueRoutingKey();
