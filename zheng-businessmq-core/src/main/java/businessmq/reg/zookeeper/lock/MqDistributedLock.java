@@ -48,12 +48,12 @@ public class MqDistributedLock {
     }
 
     private boolean waitForLock(String lower, long waitTime) throws InterruptedException, KeeperException {
-        //判断比自己小一个数的节点是否存在,如果不存在则无需等待锁,同时注册监听
-        if(zookeeperRegistryCenter.isExisted(root + "/" + lower)){
+        //判断比自己小一个数的节点是否存在,如果不存在则无需等待锁
+        while (zookeeperRegistryCenter.isExisted(root + "/" + lower)){
             System.out.println("Thread " + Thread.currentThread().getId() + " waiting for " + root + "/" + lower);
-            this.latch = new CountDownLatch(1);
-            this.latch.await(waitTime, TimeUnit.MILLISECONDS);
-            this.latch = null;
+//            this.latch = new CountDownLatch(1);
+//            this.latch.await(waitTime, TimeUnit.MILLISECONDS);
+//            this.latch = null;
         }
         return true;
     }
