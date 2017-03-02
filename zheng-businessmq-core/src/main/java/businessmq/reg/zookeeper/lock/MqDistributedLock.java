@@ -23,9 +23,9 @@ public class MqDistributedLock {
     private int sessionTimeout = 30000;
     private List<Exception> exception = new ArrayList<Exception>();
     private final ZookeeperRegistryCenter zookeeperRegistryCenter;
-    public MqDistributedLock(ZookeeperRegistryCenter _zookeeperRegistryCenter){
+    public MqDistributedLock(ZookeeperRegistryCenter _zookeeperRegistryCenter,String _lockName){
+        lockName=_lockName;
         zookeeperRegistryCenter=_zookeeperRegistryCenter;
-        zookeeperRegistryCenter.create("mqlock",new String());
     }
 
     public void lock() {
