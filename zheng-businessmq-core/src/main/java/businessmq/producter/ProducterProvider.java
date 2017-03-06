@@ -18,12 +18,15 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 生成者提供类
  * Created by alan.zheng on 2017/2/8.
  */
 public class ProducterProvider {
+    private Lock lock = new ReentrantLock();// 锁对象
     /**
      * 发送消息
      * @param producterConfig
@@ -35,6 +38,7 @@ public class ProducterProvider {
         message.setMsg(msg);
         message.setMsgType(MessageType.MYSQL.getType());
         try {
+            lock.lock();
             DbConfig dbConfig = getLoadBalanceNodeInfo(producterConfig);
             Long id= null;
             int errorcount=0;
@@ -53,6 +57,8 @@ public class ProducterProvider {
         } catch (Exception e) {
             MqLogManager.log(producterConfig.getExchangeName()+"发送消息异常",
                     e.toString(),new Date());
+        }finally {
+            lock.unlock();
         }
         String sendmsg= JSON.toJSONString(message);
         trySend(producterConfig,sendmsg);
