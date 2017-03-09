@@ -26,7 +26,11 @@ import java.util.concurrent.locks.ReentrantLock;
  * Created by alan.zheng on 2017/2/8.
  */
 public class ProducterProvider {
-    private Lock lock = new ReentrantLock();// 锁对象
+    private final ReentrantLock lock;
+
+    public ProducterProvider(){
+        lock = new ReentrantLock(true); // 锁对象
+    }
     /**
      * 发送消息
      * @param producterConfig
